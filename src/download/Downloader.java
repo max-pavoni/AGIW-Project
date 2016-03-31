@@ -12,16 +12,20 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Properties;
+
+import utils.PropertiesLoader;
 
 public class Downloader {
-
-//prova	
 
 	public static void main(String[] args) throws IOException{
 		BufferedReader br1;
 
+		Properties prop = PropertiesLoader.loadPropertiesFile();
+
+		
 		br1 = new BufferedReader(new FileReader("dataset.txt"));
-		PrintWriter index_Writer = new PrintWriter("/home/pierluigi/people/index.txt", "UTF-8");;
+		PrintWriter index_Writer = new PrintWriter(prop.getProperty("peoplePath") + "index.txt", "UTF-8");;
 		URL url = null;
 		InputStream is = null;
 		BufferedReader br;
@@ -47,7 +51,7 @@ public class Downloader {
 				// throws an IOException
 				br = new BufferedReader(new InputStreamReader(is));
 				nome_cartella_Persona = sCurrentLine.substring(link.length()).trim();
-				f = new File("/home/pierluigi/people/"+nome_cartella_Persona.toUpperCase());
+				f = new File(prop.getProperty("peoplePath") + nome_cartella_Persona.toUpperCase());
 
 				if(!f.exists()){
 					cont=1;
@@ -55,7 +59,7 @@ public class Downloader {
 				}
 
 				//apro lo stream su un nuovo file html in cui verrà salvata la pagina
-				writer = new PrintWriter("/home/pierluigi/people/" + nome_cartella_Persona.toUpperCase() + "/" + nome_cartella_Persona.toUpperCase() +"[" + cont + "].html", "UTF-8" );
+				writer = new PrintWriter(prop.getProperty("peoplePath") + nome_cartella_Persona.toUpperCase() + "/" + nome_cartella_Persona.toUpperCase() +"[" + cont + "].html", "UTF-8" );
 
 
 

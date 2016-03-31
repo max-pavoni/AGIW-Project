@@ -18,35 +18,15 @@ import org.apache.commons.codec.binary.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import utils.PropertiesLoader;
+
 public class BingSearchApiSample {
 
 final static int QUERY = 10;
 
 	public static void querySender(PrintWriter writer, String persona, int offset) throws Exception {
 	
-		Properties prop = new Properties();
-		InputStream input = null;
-
-		try {
-
-			input = new FileInputStream("properties/keys.properties");
-
-			// load a properties file
-			prop.load(input);
-
-
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
+		Properties prop = PropertiesLoader.loadPropertiesFile();
 		
 		final String accountKey = prop.getProperty("accountKey");
 

@@ -5,6 +5,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
+import utils.PropertiesLoader;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,29 +49,31 @@ public class Html2Json {
 
 
 	public static void page2JSON (Page p) {
+		
+		Properties prop = PropertiesLoader.loadPropertiesFile();
+
 		try {
-			String filepath = "/home/pierluigi/people/"+p.getNome_Persona()+".json";
-
-			if(!filepath.equals("/home/pierluigi/people/index.txt.json")){
+			//	Nome dello script da creare, spazio bianco sostituito con '_'
+			String filepath = prop.getProperty("peoplePath") + p.getNome_Persona().replace(" ","_")+".sh";
+			
+			//	Il file index.txt non viene considerato
+			if(!filepath.equals(prop.getProperty("peoplePath") + "index.txt.sh")){
+				//	Pattern del comando curl seguito dai campi dell'oggetto Page p, una volta sostituite le virgolette
 				FileWriter writer_Json = new FileWriter(filepath, true );
-
+				writer_Json.write("curl -POST 'http://localhost:9200/people/person/' -d '");
 				writer_Json.write("{\n"+
-						"title : " + "\""+p.getTitle().replace("\"", "\\\"")+"\"\n"+ 
-						"body : "+ "\"" + p.getBody().replace("\"", "\\\"")+ "\"\n" +
-						"path : "+ "\"" + p.getUrl().replace("\"", "\\\"") + "\"\n" +
-						"}\n");
+						"title : " + "\""+p.getTitle().replace("\"", "").replace("\'", "") +"\",\n"+ 
+						"body : "+ "\"" + p.getBody().replace("\"", "").replace("\'", "") + "\",\n" +
+						"path : "+ "\"" + p.getUrl().replace("\"", "").replace("\'", "") + "\"\n" +
+						"}'\n");
+				//writer_Json.write("'\n");
 				writer_Json.close();
 			}
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());
 		}
-		finally{
-
-		}
-		return;
 	}
-
 
 
 
@@ -97,7 +102,9 @@ public class Html2Json {
 
 	public static void main(String[] args) {
 
-		visit("/home/pierluigi/people/");
+		Properties prop = PropertiesLoader.loadPropertiesFile();
+		
+		visit(prop.getProperty("peoplePath"));
 
 	}
 }
