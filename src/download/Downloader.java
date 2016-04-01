@@ -13,7 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Properties;
-
 import utils.PropertiesLoader;
 
 public class Downloader {
@@ -70,7 +69,7 @@ public class Downloader {
 				
 				File fp = new File(prop.getProperty("peoplePath") + nome_cartella_Persona.toUpperCase() + "/" + nome_cartella_Persona.toUpperCase() +"[" + cont + "].html");
 
-				if(fp.getTotalSpace()==0){
+				if(fp.length()==0){
 					fp.delete();
 					is.close();
 					br.close();
