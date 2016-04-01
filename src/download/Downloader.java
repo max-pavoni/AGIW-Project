@@ -58,28 +58,40 @@ public class Downloader {
 					f.mkdir();
 				}
 
-				//apro lo stream su un nuovo file html in cui verrà salvata la pagina
+				//apro lo stream su un nuovo file html in cui verrà salvata la paginaprop.getProperty("peoplePath") + nome_cartella_Persona.toUpperCase() + "/" + nome_cartella_Persona.toUpperCase() +"[" + cont + "].htm
 				writer = new PrintWriter(prop.getProperty("peoplePath") + nome_cartella_Persona.toUpperCase() + "/" + nome_cartella_Persona.toUpperCase() +"[" + cont + "].html", "UTF-8" );
-
-
+				
+				
 
 				//leggo il documento html, e scrivo ogni riga sul file html generato prima
 				while ((line = br.readLine()) != null) {
 					writer.println(line);
 				}
+				
+				File fp = new File(prop.getProperty("peoplePath") + nome_cartella_Persona.toUpperCase() + "/" + nome_cartella_Persona.toUpperCase() +"[" + cont + "].html");
 
-				//scrivo una nuova riga sull'index
-				index_Writer.println(nome_cartella_Persona.toUpperCase()+"["+cont+"] "+link);
-				index_Writer.flush();
-				cont++;
+				if(fp.getTotalSpace()==0){
+					fp.delete();
+					is.close();
+					br.close();
+					writer.close();
+				}
+				else{
+					//scrivo una nuova riga sull'index
+					index_Writer.println(nome_cartella_Persona.toUpperCase()+"["+cont+"] "+link);
+					index_Writer.flush();
+					cont++;
 
-				is.close();
-				br.close();
-				writer.close();
+					is.close();
+					br.close();
+					writer.close();
+				}
+				
+				
 			} catch (MalformedURLException mue) {
-				mue.printStackTrace();
+				mue.getMessage();
 			} catch (IOException ioe) {
-				ioe.printStackTrace();
+				ioe.getMessage();
 				pagine_saltate++;
 			} finally {
 				try {
