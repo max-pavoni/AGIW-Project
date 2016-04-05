@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public class Html2Json {
 
-
+	private static Properties prop = PropertiesLoader.loadPropertiesFile();
 	//dobbiamo leggere gli html e trasformarli in Page (JSON)
 
 	public static void visit(String path) {
@@ -107,7 +107,9 @@ public class Html2Json {
 				String body = doc.body().text();
 				p.setBody(body);
 				p.setTitle(title);
-				p.setUrl(f.getAbsolutePath());
+				String path = f.getAbsolutePath();
+				path= path.substring(path.indexOf("people"));
+				p.setUrl("http://localhost:80/" + path);
 				p.setNome_Persona(f.getName().replace(".html", "").trim().replace("[", "").replace("]", "").replaceAll("\\d", ""));
 			}
 
