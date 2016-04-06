@@ -71,6 +71,7 @@ public class Html2Json {
 				obj.put("title", p.getTitle().replace("\'", ""));
 				obj.put("body", p.getBody().replace("\'", ""));
 				obj.put("path", p.getUrl());
+				obj.put("name_suggest", p.getTitle().replace("\'", ""));
 
 
 				//  Il file index.txt non viene considerato
